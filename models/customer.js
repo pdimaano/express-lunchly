@@ -12,6 +12,7 @@ class Customer {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.fullName = this.fullName();
     this.phone = phone;
     this.notes = notes;
   }
@@ -89,6 +90,14 @@ class Customer {
           ],
       );
     }
+  }
+
+  /** Function that returns full name of customer with first name and
+   *  last name joined by a space.
+  */
+
+  fullName() {
+    return `${this.firstName} ${this.lastName}`;
   }
 }
 
