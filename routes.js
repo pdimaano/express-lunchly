@@ -39,9 +39,9 @@ router.post("/add/", async function (req, res, next) {
 /** Search for a specific customer and return on the home page. */
 
 router.get("/search", async function (req, res) {
-  const customers = await Customer.all();
-  console.log(customers, ">>>>>>>>>>>>>>>>>>>");
-  res.send("HELLO WORLD");
+  const searchTerm = req.query.search;
+  const customers = await Customer.findCustomer(searchTerm)
+  return res.render("customer_list.html", { customers })
 });
 
 /** Show a customer, given their ID. */
