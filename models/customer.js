@@ -32,6 +32,13 @@ class Customer {
     return results.rows.map((c) => new Customer(c));
   }
 
+  /** Find a specific customer from a list of customers in database.*/
+
+  static async findCustomer() {
+    const allCustomers = await Customer.all();
+    console.log(allCustomers)
+  }
+
   /** get a customer by ID. */
 
   static async get(id) {

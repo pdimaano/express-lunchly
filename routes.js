@@ -36,6 +36,14 @@ router.post("/add/", async function (req, res, next) {
   return res.redirect(`/${customer.id}/`);
 });
 
+/** Search for a specific customer and return on the home page. */
+
+router.get("/search", async function (req, res) {
+  const customers = await Customer.all();
+  console.log(customers, ">>>>>>>>>>>>>>>>>>>");
+  res.send("HELLO WORLD");
+});
+
 /** Show a customer, given their ID. */
 
 router.get("/:id/", async function (req, res, next) {
@@ -91,5 +99,6 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
 
   return res.redirect(`/${customerId}/`);
 });
+
 
 module.exports = router;
