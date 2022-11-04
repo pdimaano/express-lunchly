@@ -29,6 +29,20 @@ router.post("/add/", async function (req, res, next) {
   if (req.body === undefined) {
     throw new BadRequestError();
   }
+
+  const missingFields = [];
+  for (const field in req.body) {
+    if (field === "firstName" || field === "lastName") {
+      if (req.body[field] === "") {
+        missingFields.push(field);
+      }
+    }
+  }
+
+  if (missingFields.length > 0) {
+    throw new BadRequestError(`Required fields: ${missingFields}`);
+  }
+
   const { firstName, lastName, phone, notes } = req.body;
   const customer = new Customer({ firstName, lastName, phone, notes });
   await customer.save();
@@ -36,12 +50,19 @@ router.post("/add/", async function (req, res, next) {
   return res.redirect(`/${customer.id}/`);
 });
 
-/** Search for a specific customer and return on the home page. */
+/** Search for customers and return on the home page. */
 
 router.get("/search", async function (req, res) {
   const searchTerm = req.query.search;
-  const customers = await Customer.findCustomer(searchTerm)
-  return res.render("customer_list.html", { customers })
+  const customers = await Customer.findCustomers(searchTerm);
+  return res.render("customer_list.html", { customers });
+});
+
+/** Show top 10 customers with most reservations. */
+
+router.get('/top-ten', async function (req, res) {
+  const customers = await Customer.topTenCustomers();
+  return res.render("customer_top_ten.html", { customers });
 });
 
 /** Show a customer, given their ID. */
@@ -84,6 +105,18 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
   if (req.body === undefined) {
     throw new BadRequestError();
   }
+
+  const missingFields = [];
+  for (const field in req.body) {
+    if (req.body[field] === "") {
+      missingFields.push(field);
+    }
+  }
+
+  if (missingFields.length > 0) {
+    throw new BadRequestError(`Required fields: ${missingFields}`);
+  }
+
   const customerId = req.params.id;
   const startAt = new Date(req.body.startAt);
   const numGuests = req.body.numGuests;

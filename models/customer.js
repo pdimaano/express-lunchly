@@ -32,9 +32,26 @@ class Customer {
     return results.rows.map((c) => new Customer(c));
   }
 
+  /** find top 10 customers. */
+  static async topTenCustomers() {
+    const results = await db.query(
+      `SELECT c.id,
+                  c.first_name AS "firstName",
+                  c.last_name AS "lastName",
+                  c.phone,
+                  c.notes
+            FROM reservations AS r
+            JOIN customers as c ON (r.customer_id = c.id)
+            GROUP BY c.id
+            ORDER BY COUNT(r.customer_id) DESC
+            LIMIT 10`
+    );
+    return results.rows.map((c) => new Customer(c));
+  }
+
   /** Find a specific customer from a list of customers in database.*/
 
-  static async findCustomer(searchTerm) {
+  static async findCustomers(searchTerm) {
     const results = await db.query(
       `SELECT id,
                 first_name AS "firstName",
@@ -85,7 +102,7 @@ class Customer {
   async save() {
     if (this.id === undefined) {
       const result = await db.query(
-        `INSERT INTO reservations (first_name, last_name, phone, notes)
+        `INSERT INTO customers (first_name, last_name, phone, notes)
              VALUES ($1, $2, $3, $4)
              RETURNING id`,
         [this.firstName, this.lastName, this.phone, this.notes]
