@@ -82,12 +82,13 @@ class Reservation {
    */
 
   get startAt() {
-    debugger
+    // debugger
     return this._startAt;
   }
 
   set startAt(val) {
     debugger
+    //! If val.toString() === "Invalid Date"
     if (val instanceof Date === false)
       throw new Error("Value must be a valid date and time.");
     this._startAt = val;
