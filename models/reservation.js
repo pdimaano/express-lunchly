@@ -34,10 +34,10 @@ class Reservation {
                   notes AS "notes"
            FROM reservations
            WHERE customer_id = $1`,
-      [customerId],
+      [customerId]
     );
 
-    return results.rows.map(row => new Reservation(row));
+    return results.rows.map((row) => new Reservation(row));
   }
 
   /** save this reservation. */
@@ -47,7 +47,7 @@ class Reservation {
         `INSERT INTO reservations (customer_id, start_at, num_guests, notes)
              VALUES ($1, $2, $3, $4)
              RETURNING id`,
-        [this.customerId, this.startAt, this.numGuests, this.notes],
+        [this.customerId, this.startAt, this.numGuests, this.notes]
       );
       this.id = result.rows[0].id;
     } else {
@@ -62,7 +62,36 @@ class Reservation {
       );
     }
   }
-}
 
+  /** Get number of guests for a reservation. If the number of guests is
+   *  less than one, throw an error.
+   */
+
+  get numGuests() {
+    return this._numGuests;
+  }
+
+  set numGuests(val) {
+    if (val < 1)
+      throw new Error("Number of guests must be greater than one person.");
+    this._numGuests = val;
+  }
+
+  /** Get start date and time for a reservation. If the value is not a Date
+   *  object, throw an error.
+   */
+
+  get startAt() {
+    debugger
+    return this._startAt;
+  }
+
+  set startAt(val) {
+    debugger
+    if (val instanceof Date === false)
+      throw new Error("Value must be a valid date and time.");
+    this._startAt = val;
+  }
+}
 
 module.exports = Reservation;

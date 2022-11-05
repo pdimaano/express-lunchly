@@ -12,7 +12,6 @@ class Customer {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.fullName = this.fullName();
     this.phone = phone;
     this.notes = notes;
   }
@@ -125,7 +124,7 @@ class Customer {
    *  last name joined by a space.
    */
 
-  fullName() {
+  get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
 }

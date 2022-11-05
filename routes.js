@@ -129,6 +129,8 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
     notes,
   });
   await reservation.save();
+  console.log(reservation.startAt, "<<<<<<<<<<<<<<<<<<<<<<STARTAT")
+  console.log(reservation.startAt instanceof Date, "<<<<<<<<<<<<STARTAT")
 
   return res.redirect(`/${customerId}/`);
 });
